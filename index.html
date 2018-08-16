@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>swiper-demo</title>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        height: 240px;
+        width: 240px;
+        margin: 60px auto;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        align-items: center
+    }
+    .list {
+        font-size: 0;
+        position: absolute;
+        width: 1440px;
+        height: 240px;
+        left: 0;
+        top: 0;
+        transition: all 1s;
+
+    }
+    .item{
+        width: 240px;
+        height: 240px;
+        display: inline-block;
+    }
+
+    .button {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .left, .right {
+        width: 60px;
+        height: 60px;
+        background: transparent;
+        z-index: 100;
+        text-align: center;
+        line-height: 60px;
+        font-size: 30px;
+        color: #ffffff;
+        cursor: pointer;
+    }
+    .pagination {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        
+    }
+
+    .pagination > span {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin: 0 4px;
+        background: #ffffff;
+        cursor: pointer;
+    }
+
+    .pagination > .active {
+        background: red;
+    }
+
+    
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="list">
+            <div class="item" style="background: black"></div>
+            <div class="item" style="background: beige"></div>
+            <div class="item" style="background: yellow"></div>
+            <div class="item" style="background: pink"></div>
+            <div class="item" style="background: greenyellow"></div>
+            <div class="item" style="background: orange"></div>
+        </div>
+        <div class="button">
+            <div class="left">&lt;</div>
+            <div class="right">&gt;</div>
+        </div>
+        <div class="pagination">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const list = document.querySelector('.list');
+            const imgs = document.querySelectorAll('.item');
+            const nextBtn = document.querySelector('.right');
+            const prevBtn = document.querySelector('.left');
+            const pags = document.querySelectorAll('span');
+            const imgLen = imgs[0].clientWidth;
+            let left = 0;
+            let num = 0;
+            
+            const timer = setInterval(() => {
+                next();
+                pagination();
+            }, 3000)
+
+            function next () {
+                if (left === 0 - imgLen * (imgs.length - 1)) {
+                    left = 0;
+                    list.style.left = left + 'px';
+                } else {
+                    left -= imgLen;
+                    list.style.left = left + 'px';
+                }
+            }
+
+            function prev () {
+                if (left === 0) {
+                    left = -imgLen * (imgs.length - 1);
+                    list.style.left = left + 'px';
+                } else {
+                    left -= -imgLen;
+                    list.style.left = left + 'px';
+                }
+            }
+            
+            pagination();
+
+            function pagination () {
+                pags.forEach((item, index) => {
+                    if (index === 0 - left / imgLen) {
+                        item.className = 'active'
+                    } else {
+                        item.className = ''
+                    }
+                })
+            }
+            
+            nextBtn.onclick = function () {
+                next();
+                pagination();
+            }
+            
+            prevBtn.onclick = function () {
+                prev();
+                pagination();
+            }
+
+            pags.forEach((item, index) => {
+                item.onclick = function () {
+                    left = 0 - imgLen * index;
+                    list.style.left = left + 'px';
+                    pagination();
+                }
+            })
+
+
+        })()
+    </script>
+</body>
+</html>
